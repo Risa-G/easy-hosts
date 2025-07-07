@@ -77,7 +77,12 @@ let
     => "nixos"
     ```
   */
-  classToND = class: if (class == "darwin") then "darwin" else "nixos";
+  classToND = class: if (class == "darwin") then
+    "darwin"
+    else if (class == "home") then
+      "home"
+    else
+      "nixos";
 
   /**
     redefineClass
@@ -336,6 +341,8 @@ let
     }:
     if ((classToND class) == "nixos") then
       { nixosConfigurations.${name} = output; }
+    else if ((classToND class) == "home") then
+      { homeConfigurations.${name} = output; }
     else
       { darwinConfigurations.${name} = output; };
 
