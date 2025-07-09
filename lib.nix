@@ -232,24 +232,23 @@ let
           nixpkgs.lib.nixosSystem
         else home-manager.lib.homeManagerConfiguration;
     in
-    evalHost {
-      pkgs = if (class == "home") then nixpkgs.legacyPackages.${system} else null;
+    if (class != "home") then evalHost {
+      # pkgs = if (class == "home") then nixpkgs.legacyPackages.${system} else null;
       # we use recursiveUpdate such that users can "override" the specialArgs
       #
       # This should only be used for special arguments that need to be evaluated
       # when resolving module structure (like in imports).
-      specialArgs = null;
-      # specialArgs = recursiveUpdate {
-      #   inherit
-      #     # these are normal args that people expect to be passed,
-      #     # but we expect to be evaluated when resolving module structure
-      #     inputs
-      #
-      #     # even though self is just the same as `inputs.self`
-      #     # we still pass this as some people will use this
-      #     self
-      #     ;
-      # } specialArgs;
+      specialArgs = recursiveUpdate {
+        inherit
+          # these are normal args that people expect to be passed,
+          # but we expect to be evaluated when resolving module structure
+          inputs
+
+          # even though self is just the same as `inputs.self`
+          # we still pass this as some people will use this
+          self
+          ;
+      } specialArgs;
 
       modules = concatLists [
         # import our host system paths
@@ -314,7 +313,7 @@ let
         # import any additional modules that the user has provided
         modules
       ];
-    };
+    } else { };
 
   /**
     toHostOutput
