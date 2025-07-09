@@ -316,7 +316,7 @@ let
     } else evalHost {
       pkgs = nixpkgs.legacyPackages.${system};
 
-      extraSpecialArgs = { inherit inputs, self; };
+      extraSpecialArgs = { inherit inputs self; };
 
       modules = concatLists [
         # import our host system paths
