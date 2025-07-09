@@ -3,6 +3,7 @@
   inputs,
   config,
   withSystem,
+  pkgs,
   ...
 }:
 let
@@ -11,7 +12,7 @@ let
   inherit (lib) types;
   inherit (lib.modules) mkRenamedOptionModule;
 
-  inherit (import ./lib.nix { inherit lib inputs withSystem; })
+  inherit (import ./lib.nix { inherit lib inputs withSystem pkgs; })
     constructSystem
     mkHosts
     buildHosts
