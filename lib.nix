@@ -232,7 +232,7 @@ let
         else home-manager.lib.homeManagerConfiguration;
     in
     evalHost {
-      pkgs = nixpkgs.legacyPackages.${system};
+      # pkgs = nixpkgs.legacyPackages.${system};
       # we use recursiveUpdate such that users can "override" the specialArgs
       #
       # This should only be used for special arguments that need to be evaluated
@@ -312,7 +312,8 @@ let
         # import any additional modules that the user has provided
         modules
       ];
-    };
+    } // lib.attrsets.optionalAttrs (class == "home") { pkgs = nixpkgs.legacyPackages.${system}; }
+    ;
 
   /**
     toHostOutput
