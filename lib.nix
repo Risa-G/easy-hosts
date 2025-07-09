@@ -314,6 +314,22 @@ let
         modules
       ];
     } else evalHost {
+      pkgs = nixpkgs.legacyPackages.${system};
+
+      extraSpecialArgs = { inherit inputs, self; };
+
+      modules = concatLists [
+        # import our host system paths
+        (
+          if path != null then
+            [ path ]
+          else
+            (filter pathExists [
+              # if the previous path does not exist then we will try to import some paths with some assumptions
+              "${self}/hosts/${name}/default.nix"
+              "${self}/systems/${name}/default.nix"
+            ])
+        )
     };
 
   /**
