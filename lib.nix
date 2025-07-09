@@ -2,6 +2,7 @@
   lib,
   inputs,
   withSystem,
+  pkgs,
   ...
 }:
 let
