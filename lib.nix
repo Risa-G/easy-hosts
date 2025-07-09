@@ -313,7 +313,8 @@ let
         # import any additional modules that the user has provided
         modules
       ];
-    } else { };
+    } else evalHost {
+    };
 
   /**
     toHostOutput
