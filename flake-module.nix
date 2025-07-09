@@ -132,6 +132,14 @@ in
                   description = "The nix-darwin flake to be used for the host";
                 };
 
+                home-manager = mkOption {
+                  type = types.anything;
+                  default = inputs.home-manager or null;
+                  defaultText = literalExpression "inputs.home-manager";
+                  example = literalExpression "inputs.my-home-manager";
+                  description = "The home-manager flake to be used for the host";
+                };
+
                 # keep this up to date with
                 # https://github.com/NixOS/nixpkgs/blob/75a43236cfd40adbc6138029557583eb77920afd/lib/systems/flake-systems.nix#L1
                 arch = mkOption {
