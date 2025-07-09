@@ -23,6 +23,7 @@ let
     filterAttrs
     mkDefault
     mergeAttrs
+    attrsets
     ;
 
   /**
@@ -230,8 +231,10 @@ let
         else if class == "nixos" then
           nixpkgs.lib.nixosSystem
         else home-manager.lib.homeManagerConfiguration;
+
+      conditionalPkg = lib.attrsets.optionalAttrs (class == "home") { pkgs = nixpkgs.legacyPackages.${system}; };
     in
-    evalHost {
+    conditionalPkg // evalHost {
       # pkgs = nixpkgs.legacyPackages.${system};
       # we use recursiveUpdate such that users can "override" the specialArgs
       #
@@ -312,8 +315,7 @@ let
         # import any additional modules that the user has provided
         modules
       ];
-    } // lib.attrsets.optionalAttrs (class == "home") { pkgs = nixpkgs.legacyPackages.${system}; }
-    ;
+    };
 
   /**
     toHostOutput
