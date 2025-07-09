@@ -389,6 +389,7 @@ let
               path
               nixpkgs
               nix-darwin
+              home-manager
               ;
 
             modules = concatLists [
