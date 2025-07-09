@@ -311,7 +311,7 @@ let
         # import any additional modules that the user has provided
         modules
       ];
-    };
+    } // lib.optionalAttrs (class == "home") { pkgs = nixpkgs.legacyPacakges.${system}; };
 
   /**
     toHostOutput
