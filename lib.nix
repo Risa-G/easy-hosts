@@ -330,6 +330,42 @@ let
               "${self}/systems/${name}/default.nix"
             ])
         )
+
+        # the next 3 singleton's are split up to make it easier to understand as they do things different things
+
+        # recall `specialArgs` would take be preferred when resolving module structure
+        # well this is how we do it use it for all args that don't need to rosolve module structure
+        (singleton {
+          _module.args = withSystem system (
+            { self', inputs', ... }:
+            {
+              inherit self' inputs';
+            }
+          );
+        })
+
+        # here we make some basic assumptions about the system the person is using
+        # like the system type and the hostname
+        (singleton {
+          # we set the systems hostname based on the host value
+          # which should be a string that is the hostname of the system
+          networking.hostName = mkDefault name;
+
+          nixpkgs = {
+            # you can also do this as `inherit system;` with the normal `lib.nixosSystem`
+            # however for evalModules this will not work, so we do this instead
+            hostPlatform = mkDefault system;
+
+            # The path to the nixpkgs sources used to build the system.
+            # This is automatically set up to be the store path of the nixpkgs flake used to build
+            # the system if using lib.nixosSystem, and is otherwise null by default.
+            # so that means that we should set it to our nixpkgs flake output path
+            flake.source = nixpkgs.outPath;
+          };
+        })
+
+        modules
+      ];
     };
 
   /**
