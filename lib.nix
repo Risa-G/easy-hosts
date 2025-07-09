@@ -231,19 +231,14 @@ let
         else if class == "nixos" then
           nixpkgs.lib.nixosSystem
         else home-manager.lib.homeManagerConfiguration;
-      evalArgs =
-        if class == "home" then
-          extraSpecialArgs
-        else specialArgs;
     in
     evalHost {
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = if (class == "home") then nixpkgs.legacyPackages.${system} else null;
       # we use recursiveUpdate such that users can "override" the specialArgs
       #
       # This should only be used for special arguments that need to be evaluated
       # when resolving module structure (like in imports).
-      # specialArgs = recursiveUpdate {
-      evalArgs = recursiveUpdate {
+      specialArgs = recursiveUpdate {
         inherit
           # these are normal args that people expect to be passed,
           # but we expect to be evaluated when resolving module structure
