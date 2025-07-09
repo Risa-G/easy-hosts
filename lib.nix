@@ -232,6 +232,7 @@ let
         else home-manager.lib.homeManagerConfiguration;
     in
     evalHost {
+      inherit pkgs;
       # we use recursiveUpdate such that users can "override" the specialArgs
       #
       # This should only be used for special arguments that need to be evaluated
