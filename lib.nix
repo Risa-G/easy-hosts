@@ -232,7 +232,9 @@ let
           nixpkgs.lib.nixosSystem
         else home-manager.lib.homeManagerConfiguration;
 
-      conditionalPkg = lib.attrsets.optionalAttrs (class == "home") { pkgs = nixpkgs.legacyPackages.${system}; };
+      conditionalPkg = builtins.trace(
+        lib.attrsets.optionalAttrs (class == "home") { pkgs = nixpkgs.legacyPackages.${system}; }
+        lib.attrsets.optionalAttrs (class == "home") { pkgs = nixpkgs.legacyPackages.${system}; });
     in
     conditionalPkg // evalHost {
       # pkgs = nixpkgs.legacyPackages.${system};
