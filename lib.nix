@@ -218,7 +218,7 @@ let
       system,
       nixpkgs,
       nix-darwin,
-      # home-manager,
+      home-manager,
       modules ? [ ],
       specialArgs ? { },
       ...
@@ -389,7 +389,7 @@ let
               path
               nixpkgs
               nix-darwin
-              # home-manager
+              home-manager
               ;
 
             modules = concatLists [
