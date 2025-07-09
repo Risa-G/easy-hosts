@@ -222,6 +222,7 @@ let
       home-manager,
       modules ? [ ],
       specialArgs ? { },
+      extraSpecialArgs ? { },
       ...
     }:
     let
@@ -231,6 +232,10 @@ let
         else if class == "nixos" then
           nixpkgs.lib.nixosSystem
         else home-manager.lib.homeManagerConfiguration;
+      evalArgs =
+        if class == "home" then
+          extraSpecialArgs
+        else specialArgs;
     in
     evalHost {
       pkgs = if (class == "home") then nixpkgs.legacyPackages.${system} else null;
@@ -238,7 +243,7 @@ let
       #
       # This should only be used for special arguments that need to be evaluated
       # when resolving module structure (like in imports).
-      specialArgs = recursiveUpdate {
+      evalArgs = recursiveUpdate {
         inherit
           # these are normal args that people expect to be passed,
           # but we expect to be evaluated when resolving module structure
