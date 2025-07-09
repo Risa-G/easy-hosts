@@ -218,12 +218,18 @@ let
       system,
       nixpkgs,
       nix-darwin,
+      home-manager,
       modules ? [ ],
       specialArgs ? { },
       ...
     }:
     let
-      evalHost = if class == "darwin" then nix-darwin.lib.darwinSystem else nixpkgs.lib.nixosSystem;
+      evalHost =
+        if class == "darwin" then
+          nix-darwin.lib.darwinSystem
+        else if class == "nixos" then
+          nixpkgs.lib.nixosSystem
+        else home-manager.lib.homeManagerConfiguration;
     in
     evalHost {
       # we use recursiveUpdate such that users can "override" the specialArgs
